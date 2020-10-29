@@ -11,12 +11,25 @@ typedef struct
     HashMap* distancias;
 } ciudad; //Estuctura de cada ciudad (Nombre y distancia)
 
+typedef struct 
+{
+    char *nombre;
+    int dis;
+} info_distancias;
+
 ciudad * crearCiudad() //Funcion para crear una ciudad
 {
     ciudad* input = (ciudad *) calloc (1, sizeof(ciudad)); //Se asigna memoria a la ciudad
     input->nombre = (char *) calloc (20, sizeof(char));
     input->distancias = createMap(50);
     return input; //Se retorna la ciudad creada
+}
+
+info_distancias* crearDistancia() //Funcion que inicializa variables del mapa distancia
+{
+    info_distancias* input = (info_distancias *) calloc (1, sizeof(info_distancias));
+    input->nombre = (char *) calloc (50, sizeof(char));
+    return input;
 }
 /*
 typedef struct{
@@ -27,10 +40,10 @@ typedef struct{
 
 void agregaInfo (HashMap* map, char* ciudad1, char* ciudad2, int distancia) //Funcion para agregar ciudades al un mapa
 {
-    ciudad* c1 = searchMap(map, ciudad1); //Se buscan en el mapa las ciudades 
+    ciudad* c1 = searchMap(map, ciudad1);
     ciudad* c2 = searchMap(map, ciudad2);
 
-    if(c1 == NULL) 
+    if(c1 == NULL)
     {
         c1 = crearCiudad();
         insertMap(map, ciudad1, c1);
@@ -42,8 +55,13 @@ void agregaInfo (HashMap* map, char* ciudad1, char* ciudad2, int distancia) //Fu
         insertMap(map, ciudad2, c2);
     }
 
-    insertMap(c1->distancias, ciudad2, &distancia);
-    insertMap(c2->distancias, ciudad1, &distancia);
+    info_distancias* datos = crearDistancia();
+    datos->nombre = ciudad1;
+    datos->dis = distancia;
+    insertMap(c2->distancias, ciudad1, datos);
+
+    datos->nombre = ciudad2;
+    insertMap(c1->distancias, ciudad2, datos);
 }
 
 int main()
@@ -101,38 +119,28 @@ void Importar(char* nombre, HashMap* map) //Funcion que importa ciudades desde u
 }
  
 
-void CiudadMasCercana (HashMap* map, char* ciudad)
+void ciudad_mas_cercana(HashMap* map, char* origen) //Funcion que muestra por pantalla la ciudad mas cercana a una ciudad ingresada por el usuario
 {
-  int distancia_mas_cercana = 0;
-  char mas_cercana[10];
-
-  int flag = 0;
-  int cont = 0;
-  int pos = 0;
-  while(map != NULL)
-  {
-    if(firstMap(HashMap* map) != NULL){
-      if(strcmp(map->buckets[cont]->key, ciudad) == 0)
-      {
-        flag++;
-        break;
-      }
-      cont++;
+    ciudad* aux = searchMap(map, origen);
+    if(aux == NULL)
+    {
+        printf("La ciudad de origen no se encuentra almacenada en tu GPS\n");
+        return;
     }
-    else{
-      printf("1");
-      break;
+
+    info_distancias* mas_cercana = crearDistancia();
+    info_distancias* aux_distancias = crearDistancia();
+    aux_distancias = firstMap(aux->distancias);
+    while(nextMap(aux->distancias) != NULL)
+    {
+        if(mas_cercana->dis > aux_distancias->dis)
+        {
+            mas_cercana->nombre = aux_distancias->nombre;
+            mas_cercana->dis = aux_distancias->dis;
+        }
     }
-  }
 
-  if(flag == 0)
-  {
-    printf("No se encontro la ciudad en tu GPS\n");
-    return;
-  }
-  
-  //Algoritmo de Dijkstra
-
+    printf("La ciudad mas cercana a %s es %s con %i Km de distancia\n", origen, mas_cercana->nombre, mas_cercana->dis);
 }
 
 void CrearRuta(HashMap* map, char* origen)
