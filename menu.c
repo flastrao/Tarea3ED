@@ -3,7 +3,6 @@
 void Importar(HashMap* map, char* nombre);
 void CiudadMasCercana(HashMap* map, char* nombre);
 void CrearRuta(HashMap* map, char* origen);
-void mostrartodo(HashMap* map);
 
 int menu (HashMap* map)
 {
@@ -66,9 +65,8 @@ int menu (HashMap* map)
             }
             default:
             {
-                //printf("Entrada no valida\n");
-                //printf("\n");
-                mostrartodo(map);
+                printf("Entrada no valida\n");
+                printf("\n");
                 break;
             }        
         }

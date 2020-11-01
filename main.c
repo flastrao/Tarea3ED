@@ -151,13 +151,6 @@ void CrearRuta(HashMap* map, char* origen) //Funcion que permite crear una ruta 
 
     while(1) //Ciclo que va preguntando al usuario a cual de ciudades que se imprimen por pantalla quiere ir para ir armando una ruta
     {
-        //Se imprime por pantalla las ciudades adyacentes a la ciudad en la cual esta actualmente el usuario
-        Ciudad* aux_distancias = firstMap(aux->distancias);
-        while(aux_distancias != NULL)
-        {
-            printf("%s\n", aux_distancias->nombre);
-            aux_distancias = nextMap(aux->distancias);
-        }
         //Se le pregunta al usuario si desea continuar su ruta y de querer seguir se le pregunta a cual ciudad desea ir
         char validador[3];
         printf("¿Deseas continuar tu ruta? (INGRESE 'Si' o 'No' respetando mayusculas)\n");
@@ -172,9 +165,23 @@ void CrearRuta(HashMap* map, char* origen) //Funcion que permite crear una ruta 
         {
             char ciudad_sgte[10];
             printf("¿A que ciudad deseas ir ahora?\n");
+            //Se imprime por pantalla las ciudades adyacentes a la ciudad en la cual esta actualmente el usuario
+            Ciudad* aux_distancias = firstMap(aux->distancias);
+            printf("\n");
+            while(aux_distancias != NULL)
+            {
+                printf("%s\n", aux_distancias->nombre);
+                aux_distancias = nextMap(aux->distancias);
+            }
+            printf("\n");
             fflush(stdin);
             scanf("%s", ciudad_sgte);
             aux = searchMap(map, ciudad_sgte);
+            if(aux == NULL)
+            {
+                printf("La ciudad de ingresada no se encuentra almacenada en tu GPS por lo tanto tu ruta termino\n");
+                return;
+            }
         }
 
     }    
@@ -222,12 +229,3 @@ void Ruta_Mas_Cercana(HashMap* map, char* origen, char* destino)
     }
 }
 */
-void mostrartodo(HashMap* map) //SOLO PARA PRUEBAS
-{
-    Ciudad* aux = firstMap(map);
-    while(aux != NULL)
-    {
-        printf("%s\n", aux->nombre);
-        aux = nextMap(map);
-    }
-}
