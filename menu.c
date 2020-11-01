@@ -49,6 +49,23 @@ int menu (HashMap* map)
               //RutaOptima(map, origen, destino);
               break;
             }
+            case 'd':
+            {
+                char ciudad1[10];
+                char ciudad2[10];
+                char ciudad3[10];
+                printf("Ingresa el nombre de la ciudad donde quieres comenzar tu ruta (Respete mayusculas e ignore espacios en caso de ser necesitados)\n");
+                fflush(stdin);
+                scanf("%s", ciudad1);
+                printf("Ingresa el nombre de la segunda ciudad por donde quieres que pase tu ruta (Respete mayusculas e ignore espacios en caso de ser necesitados)\n");
+                fflush(stdin);
+                scanf("%s", ciudad2);
+                printf("Ingresa el nombre de la tercera ciudad donde quieres que pase tu ruta (Respete mayusculas e ignore espacios en caso de ser necesitados)\n");
+                fflush(stdin);
+                scanf("%s", ciudad3);
+                //MejorCircuito(map, ciudad1, ciudad2, ciudad3);
+                break;          
+            }
             case 'e':
             {
                 char archivo[20];
