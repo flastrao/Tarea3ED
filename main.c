@@ -55,13 +55,15 @@ void agregaInfo (HashMap* map, char* ciudad1, char* ciudad2, int distancia) //Fu
         insertMap(map, ciudad2, c2);
     }
 
-    Info_Distancias* datos = crearDistancia(distancia);
+    Info_Distancias* datosC2 = crearDistancia(distancia);
 
-    datos->nombre = ciudad1;
-    insertMap(c1->distancias, ciudad2, datos); //Se ingresa ciudad 2 al mapa de distancias de ciudad 1
+    datosC2->nombre = ciudad2;
+    insertMap(c1->distancias, ciudad2, datosC2); //Se ingresa ciudad 2 al mapa de distancias de ciudad 1
 
-    datos->nombre = ciudad2;
-    insertMap(c2->distancias, ciudad1, datos); //Se ingresa ciudad 1 al mapa de distancias de ciudad 2
+    Info_Distancias* datosC1 = crearDistancia(distancia);
+    
+    datosC1->nombre = ciudad1;
+    insertMap(c2->distancias, ciudad1, datosC1); //Se ingresa ciudad 1 al mapa de distancias de ciudad 2
 }
 
 int main()
@@ -149,8 +151,13 @@ void CrearRuta(HashMap* map, char* origen) //Funcion que permite crear una ruta 
         return;
     }
 
+    int dist_acumulada = 0;
+    List* list = createList();
+    char* x;
+    Info_Distancias* ciudad_seleccionada;
     while(1) //Ciclo que va preguntando al usuario a cual de ciudades que se imprimen por pantalla quiere ir para ir armando una ruta
     {
+        pushBack(list, aux->nombre); //Se ingresan los datos a la lista que al finalizar la ruta entregara las ciudades por la cual se paso
         //Se le pregunta al usuario si desea continuar su ruta y de querer seguir se le pregunta a cual ciudad desea ir
         char validador[3];
         printf("¿Deseas continuar tu ruta? (INGRESE 'Si' o 'No' respetando mayusculas)\n");
@@ -158,7 +165,15 @@ void CrearRuta(HashMap* map, char* origen) //Funcion que permite crear una ruta 
         scanf("%s", validador);
         if(strcmp(validador, "No") == 0)
         {
-            printf("Has terminado tu ruta\n");
+            printf("Resumen de tu ruta:\n");
+            printf("- Recorriste %i Kms\n", dist_acumulada);
+            printf("- Pasaste por:\n");
+            x = first(list);
+            while(x != NULL)
+            {
+                printf("%s\n", x);
+                x = next(list);
+            }
             return;
         } 
         else
@@ -176,12 +191,9 @@ void CrearRuta(HashMap* map, char* origen) //Funcion que permite crear una ruta 
             printf("\n");
             fflush(stdin);
             scanf("%s", ciudad_sgte);
-            aux = searchMap(map, ciudad_sgte);
-            if(aux == NULL)
-            {
-                printf("La ciudad de ingresada no se encuentra almacenada en tu GPS por lo tanto tu ruta termino\n");
-                return;
-            }
+            ciudad_seleccionada = searchMap(aux->distancias, ciudad_sgte);
+            dist_acumulada += ciudad_seleccionada->dis; //Se aumentan la cantidad final de Kms recorridos en la ruta
+            aux = searchMap(map, ciudad_sgte); 
         }
 
     }    
