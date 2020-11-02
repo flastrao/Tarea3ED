@@ -1,32 +1,38 @@
-#ifndef __defined_arraylist_h
-#define __defined_arraylist_h
-
 #include <stdlib.h>
 #include <stdio.h>
 
+#ifndef _list_h
+#define _list_h
 
 typedef struct List List;
+typedef List Stack;
 
-List* create_list();
+/* list operations */
 
-void push_back(List* L, void* object);
-
-void pop_front(List* L);
-
-void pop_back(List* L);
-
-void pop_current(List* L);
-
-int is_empty(List* L);
-
-int size(List* L);
-
-void* first(List* L);
-
-void* next(List* L);
-
-void clear(List* L);
-
+List* createList();
+void clean(List* list);
+int is_empty(List* list);
+void* front(List* list);
+void* first(List* list);
+void* next(List* list);
+void* last(List* list);
+void* prev(List* list);
+void popFront(List* list);
+void popBack(List* list);
+void pushFront(List* list, void* data);
+void pushBack(List* list, void* data);
+void pushCurrent(List* list, void* data);
+void popCurrent(List* list);
+int get_size();
 
 
-#endif /* __defined_arraylist_h */
+/* stack operations */
+Stack* createStack();
+void pop(Stack* s);
+void* top(Stack* s);
+void push(Stack* s, void* data);
+
+
+
+
+#endif /* _list_h */
